@@ -1,0 +1,78 @@
+.footer {
+  background: #050505;
+  border-top: 1px solid var(--border);
+  padding: 40px 24px;
+  margin-top: auto;
+}
+
+.footer-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+
+  .logo-icon {
+    color: var(--gold);
+    font-size: 20px;
+  }
+
+  .logo-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    color: var(--white);
+  }
+
+  p {
+    width: 100%;
+    font-size: 12px;
+    color: var(--dim);
+    margin: 0;
+    padding-left: 2px;
+  }
+}
+
+.footer-credits {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+
+  @media (max-width: 600px) {
+    align-items: flex-start;
+  }
+}
+
+.credits-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--dim);
+}
+
+.credits-names {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--gold);
+  font-family: 'Playfair Display', serif;
+
+  .dot { color: var(--dim); }
+}
+
+.credits-year {
+  font-size: 11px;
+  color: var(--dim);
+}
