@@ -1,0 +1,63 @@
+<nav class="navbar" [class.scrolled]="scrolled()">
+  <div class="nav-inner">
+    <!-- Logo -->
+    <a routerLink="/" class="logo" (click)="closeMenu()">
+      <span class="logo-icon">✦</span>
+      <span class="logo-text">DOOSE</span>
+    </a>
+
+    <!-- Desktop links -->
+    <ul class="nav-links">
+      <li><a routerLink="/"           routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Inicio</a></li>
+      <li><a routerLink="/portafolio" routerLinkActive="active">Portafolio</a></li>
+      <li><a routerLink="/servicios"  routerLinkActive="active">Servicios</a></li>
+      <li><a routerLink="/contacto"   routerLinkActive="active">Contacto</a></li>
+      @if (auth.isLoggedIn()) {
+        <li><a routerLink="/favoritos" routerLinkActive="active">Favoritos</a></li>
+      }
+      @if (auth.isAdmin()) {
+        <li class="admin-link"><a routerLink="/admin" routerLinkActive="active">Admin</a></li>
+      }
+    </ul>
+
+    <!-- Auth actions -->
+    <div class="nav-actions">
+      @if (auth.isLoggedIn()) {
+        <span class="user-name">{{ auth.currentUser()?.name }}</span>
+        <button class="btn btn-ghost btn-sm" (click)="auth.logout()">Salir</button>
+      } @else {
+        <a routerLink="/login"    class="btn btn-ghost btn-sm">Iniciar sesión</a>
+        <a routerLink="/registro" class="btn btn-primary btn-sm">Registrarse</a>
+      }
+    </div>
+
+    <!-- Hamburger -->
+    <button class="hamburger" (click)="toggleMenu()" [class.open]="menuOpen()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <!-- Mobile menu -->
+  @if (menuOpen()) {
+    <div class="mobile-menu">
+      <a routerLink="/"           (click)="closeMenu()">Inicio</a>
+      <a routerLink="/portafolio" (click)="closeMenu()">Portafolio</a>
+      <a routerLink="/servicios"  (click)="closeMenu()">Servicios</a>
+      <a routerLink="/contacto"   (click)="closeMenu()">Contacto</a>
+      @if (auth.isLoggedIn()) {
+        <a routerLink="/favoritos" (click)="closeMenu()">Favoritos</a>
+      }
+      @if (auth.isAdmin()) {
+        <a routerLink="/admin" (click)="closeMenu()">Admin</a>
+      }
+      <div class="mobile-auth">
+        @if (auth.isLoggedIn()) {
+          <button class="btn btn-ghost" (click)="auth.logout(); closeMenu()">Cerrar sesión</button>
+        } @else {
+          <a routerLink="/login"    class="btn btn-ghost"   (click)="closeMenu()">Iniciar sesión</a>
+          <a routerLink="/registro" class="btn btn-primary" (click)="closeMenu()">Registrarse</a>
+        }
+      </div>
+    </div>
+  }
+</nav>

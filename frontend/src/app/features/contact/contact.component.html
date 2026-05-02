@@ -1,0 +1,77 @@
+<div class="contact-page">
+  <div class="container">
+    <div class="contact-grid">
+
+      <!-- Left: info -->
+      <div class="contact-info fade-in">
+        <span class="eyebrow">Hablemos</span>
+        <h1>Agenda tu<br><em>Tatuaje</em></h1>
+        <div class="gold-line" style="margin: 0 0 28px;"></div>
+        <p>¿Tienes una idea en mente? Cuéntanos y la hacemos realidad. Responderemos en menos de 24 horas.</p>
+
+        <div class="info-items">
+          <div class="info-item">
+            <span class="material-icons">schedule</span>
+            <div>
+              <strong>Horario</strong>
+              <span>Lun–Sáb: 10am – 7pm</span>
+            </div>
+          </div>
+          <div class="info-item">
+            <span class="material-icons">location_on</span>
+            <div>
+              <strong>Ubicación</strong>
+              <span>Medellín, Colombia</span>
+            </div>
+          </div>
+          <div class="info-item">
+            <span class="material-icons">instagram</span>
+            <div>
+              <strong>Instagram</strong>
+              <span>&#64;doose.ink</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: form -->
+      <div class="contact-form-wrap fade-in">
+        @if (sent()) {
+          <div class="success-state">
+            <span class="material-icons">check_circle</span>
+            <h3>¡Mensaje enviado!</h3>
+            <p>Nos pondremos en contacto muy pronto.</p>
+          </div>
+        } @else {
+          <div class="card">
+            @if (error) {
+              <div class="alert-error">{{ error }}</div>
+            }
+            <form (ngSubmit)="submit()" #f="ngForm">
+              <div class="field">
+                <label>Nombre</label>
+                <input type="text" [(ngModel)]="form.name" name="name" placeholder="Tu nombre" required>
+              </div>
+              <div class="field">
+                <label>Correo electrónico</label>
+                <input type="email" [(ngModel)]="form.email" name="email" placeholder="tu@email.com" required>
+              </div>
+              <div class="field">
+                <label>Teléfono (opcional)</label>
+                <input type="tel" [(ngModel)]="form.phone" name="phone" placeholder="+57 300 000 0000">
+              </div>
+              <div class="field">
+                <label>¿Qué tienes en mente?</label>
+                <textarea [(ngModel)]="form.message" name="message" placeholder="Describe tu idea, el tamaño aproximado, zona del cuerpo..." required></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary full" [disabled]="loading || !f.valid">
+                {{ loading ? 'Enviando...' : 'Enviar mensaje' }}
+              </button>
+            </form>
+          </div>
+        }
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,86 @@
+<div class="admin-page">
+  <div class="container">
+    <div class="admin-header">
+      <h1>Dashboard</h1>
+      <p>Bienvenido al panel de administración de Doose.</p>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span class="material-icons">photo_library</span>
+        <div>
+          <span class="stat-value">{{ totalPortfolio }}</span>
+          <span class="stat-label">Ítems en portafolio</span>
+        </div>
+        <a routerLink="/admin/portafolio" class="stat-link">Gestionar →</a>
+      </div>
+      <div class="stat-card">
+        <span class="material-icons">people</span>
+        <div>
+          <span class="stat-value">{{ totalUsers }}</span>
+          <span class="stat-label">Usuarios registrados</span>
+        </div>
+        <a routerLink="/admin/usuarios" class="stat-link">Ver usuarios →</a>
+      </div>
+      <div class="stat-card">
+        <span class="material-icons">brush</span>
+        <div>
+          <span class="stat-value">{{ totalServices }}</span>
+          <span class="stat-label">Servicios activos</span>
+        </div>
+        <a routerLink="/admin/servicios" class="stat-link">Gestionar →</a>
+      </div>
+      <div class="stat-card">
+        <span class="material-icons">mail</span>
+        <div>
+          <span class="stat-value">{{ totalMessages }}</span>
+          <span class="stat-label">Mensajes recibidos</span>
+        </div>
+        <a routerLink="/admin/mensajes" class="stat-link">Ver mensajes →</a>
+      </div>
+    </div>
+
+    <!-- Top of week -->
+    <div class="top-section">
+      <h2>Imagen más popular esta semana</h2>
+      <div class="gold-line" style="margin: 0 0 32px;"></div>
+
+      @if (topItem) {
+        <div class="top-card">
+          <img [src]="topItem.imageBase64" [alt]="topItem.description">
+          <div class="top-info">
+            <span class="badge badge-admin">★ Top de la semana</span>
+            <h3>{{ topItem.description }}</h3>
+            <div class="top-meta">
+              <span>Tamaño: <strong>{{ topItem.size }}</strong></span>
+              <span>Precio: <strong class="gold">${{ topItem.price | number:'1.0-0' }}</strong></span>
+              <span>Favoritos: <strong>{{ topItem.favoritesCount }}</strong></span>
+            </div>
+          </div>
+        </div>
+      } @else {
+        <div class="empty">
+          <span class="material-icons">bar_chart</span>
+          <p>No hay datos esta semana. ¡Sube imágenes al portafolio!</p>
+        </div>
+      }
+    </div>
+
+    <!-- Quick links -->
+    <div class="quick-links">
+      <a routerLink="/admin/portafolio" class="quick-btn">
+        <span class="material-icons">add_photo_alternate</span>
+        Subir imagen
+      </a>
+      <a routerLink="/admin/servicios" class="quick-btn">
+        <span class="material-icons">add_circle</span>
+        Nuevo servicio
+      </a>
+      <a routerLink="/admin/mensajes" class="quick-btn">
+        <span class="material-icons">mail</span>
+        Ver mensajes
+      </a>
+    </div>
+  </div>
+</div>

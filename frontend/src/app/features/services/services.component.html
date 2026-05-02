@@ -1,0 +1,45 @@
+<div class="page-header">
+  <div class="container">
+    <span class="eyebrow">Lo que ofrecemos</span>
+    <h1>Servicios</h1>
+    <div class="gold-line"></div>
+    <p>Desde diseños minimalistas hasta composiciones complejas, tenemos el estilo que buscas.</p>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+    @if (!services.length) {
+      <div class="empty">
+        <span class="material-icons">build</span>
+        <p>No hay servicios disponibles por ahora.</p>
+      </div>
+    }
+
+    <div class="services-grid">
+      @for (svc of services; track svc.id) {
+        <div class="service-card card fade-in">
+          @if (svc.imageBase64) {
+            <div class="svc-img">
+              <img [src]="svc.imageBase64" [alt]="svc.name">
+            </div>
+          } @else {
+            <div class="svc-icon-wrap">
+              <span class="material-icons">brush</span>
+            </div>
+          }
+          <div class="svc-body">
+            <h3>{{ svc.name }}</h3>
+            <p>{{ svc.description }}</p>
+          </div>
+          <div class="svc-footer">
+            @if (svc.price) {
+              <span class="svc-price">Desde ${{ svc.price | number:'1.0-0' }}</span>
+            }
+            <a routerLink="/contacto" class="btn btn-outline btn-sm">Consultar</a>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>

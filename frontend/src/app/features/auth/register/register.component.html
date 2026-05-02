@@ -1,0 +1,35 @@
+<div class="auth-page">
+  <div class="auth-card fade-in">
+    <div class="auth-header">
+      <span class="logo-icon">✦</span>
+      <h2>Crear cuenta</h2>
+      <p>Únete a la comunidad Doose</p>
+    </div>
+
+    @if (error) {
+      <div class="alert-error">{{ error }}</div>
+    }
+
+    <form (ngSubmit)="submit()" #f="ngForm">
+      <div class="field">
+        <label>Nombre completo</label>
+        <input type="text" [(ngModel)]="name" name="name" placeholder="Tu nombre" required>
+      </div>
+      <div class="field">
+        <label>Correo electrónico</label>
+        <input type="email" [(ngModel)]="email" name="email" placeholder="tu@email.com" required>
+      </div>
+      <div class="field">
+        <label>Contraseña</label>
+        <input type="password" [(ngModel)]="password" name="password" placeholder="Mínimo 6 caracteres" required minlength="6">
+      </div>
+      <button type="submit" class="btn btn-primary full" [disabled]="loading || !f.valid">
+        {{ loading ? 'Cargando...' : 'Crear cuenta' }}
+      </button>
+    </form>
+
+    <p class="auth-footer">
+      ¿Ya tienes cuenta? <a routerLink="/login">Inicia sesión</a>
+    </p>
+  </div>
+</div>

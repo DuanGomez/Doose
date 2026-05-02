@@ -1,0 +1,10 @@
+.admin-page { min-height: 100vh; padding: 100px 0 60px; }
+
+.admin-header {
+  margin-bottom: 40px;
+
+  h1 { font-size: 2rem; margin-bottom: 4px; }
+  p  { color: var(--muted); font-size: 14px; }
+}
+
+.muted { color: var(--muted) !important; font-size: 13px; }

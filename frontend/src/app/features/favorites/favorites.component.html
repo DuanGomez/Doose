@@ -1,0 +1,38 @@
+<div class="page-header">
+  <div class="container">
+    <span class="eyebrow">Tu colección</span>
+    <h1>Mis Favoritos</h1>
+    <div class="gold-line"></div>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+    @if (!favorites.length) {
+      <div class="empty">
+        <span class="material-icons">favorite_border</span>
+        <p>Aún no has guardado favoritos.<br>Explora el portafolio y guarda los que más te gusten.</p>
+      </div>
+    }
+
+    <div class="grid-3">
+      @for (item of favorites; track item.id) {
+        <div class="fav-card fade-in">
+          <div class="fav-img">
+            <img [src]="item.imageBase64" [alt]="item.description">
+          </div>
+          <div class="fav-info">
+            <p>{{ item.description }}</p>
+            <div class="meta">
+              <span>{{ item.size }}</span>
+              <span class="price">${{ item.price | number:'1.0-0' }}</span>
+            </div>
+            <button class="btn btn-danger" (click)="remove(item)">
+              <span class="material-icons">delete</span> Quitar
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>

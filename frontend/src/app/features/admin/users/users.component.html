@@ -1,0 +1,45 @@
+<div class="admin-page">
+  <div class="container">
+    <div class="admin-header">
+      <a routerLink="/admin/dashboard" class="back-btn">Volver al dashboard</a>
+      <h1>Usuarios</h1>
+      <p>Lista de todos los usuarios registrados en la plataforma.</p>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Nombre</th>
+            <th>Correo</th>
+            <th>Rol</th>
+            <th>Registro</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (u of users; track u.id; let i = $index) {
+            <tr>
+              <td class="muted">{{ i + 1 }}</td>
+              <td><strong>{{ u.name }}</strong></td>
+              <td class="muted">{{ u.email }}</td>
+              <td>
+                <span [class]="'badge badge-' + u.role.toLowerCase()">
+                  {{ u.role === 'ADMIN' ? 'Administrador' : 'Usuario' }}
+                </span>
+              </td>
+              <td class="muted">{{ u.createdAt | date:'dd/MM/yyyy' }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    @if (!users.length) {
+      <div class="empty">
+        <span class="material-icons">people</span>
+        <p>No hay usuarios registrados.</p>
+      </div>
+    }
+  </div>
+</div>

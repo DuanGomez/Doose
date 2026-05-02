@@ -1,0 +1,96 @@
+<div class="admin-page">
+  <div class="container">
+    <div class="page-top">
+      <div>
+        <a routerLink="/admin/dashboard" class="back-btn">Volver al dashboard</a>
+        <h1>Portafolio</h1>
+        <p>Gestiona las imágenes de tu portafolio.</p>
+      </div>
+      <button class="btn btn-primary" (click)="openNew()">
+        <span class="material-icons">add</span> Subir imagen
+      </button>
+    </div>
+
+    @if (!items.length) {
+      <div class="empty">
+        <span class="material-icons">photo_library</span>
+        <p>No hay imágenes. ¡Sube la primera!</p>
+      </div>
+    }
+
+    <div class="grid-3">
+      @for (item of items; track item.id) {
+        <div class="p-card">
+          <div class="p-img">
+            <img [src]="item.imageBase64" [alt]="item.description">
+            <div class="p-actions">
+              <button class="icon-btn" (click)="openEdit(item)" title="Editar">
+                <span class="material-icons">edit</span>
+              </button>
+              <button class="icon-btn danger" (click)="delete(item.id!)" title="Eliminar">
+                <span class="material-icons">delete</span>
+              </button>
+            </div>
+          </div>
+          <div class="p-info">
+            <p>{{ item.description }}</p>
+            <div class="p-meta">
+              <span>{{ item.size }}</span>
+              <span class="gold">${{ item.price | number:'1.0-0' }}</span>
+              <span class="fav-count">♥ {{ item.favoritesCount }}</span>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+@if (showModal()) {
+  <div class="modal-overlay" (click)="showModal.set(false)">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>{{ editing() ? 'Editar imagen' : 'Subir imagen' }}</h3>
+        <button class="close" (click)="showModal.set(false)">✕</button>
+      </div>
+
+      <!-- Image upload -->
+      <div class="upload-zone" (click)="fileInput.click()">
+        @if (previewUrl) {
+          <img [src]="previewUrl" alt="Preview">
+        } @else {
+          <div class="upload-placeholder">
+            <span class="material-icons">cloud_upload</span>
+            <span>Haz clic para seleccionar una imagen</span>
+          </div>
+        }
+        <input #fileInput type="file" accept="image/*" (change)="onFile($event)" hidden>
+      </div>
+
+      <div class="modal-fields">
+        <div class="field">
+          <label>Descripción</label>
+          <textarea [(ngModel)]="form.description" placeholder="Describe el tatuaje..."></textarea>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Tamaño</label>
+            <input type="text" [(ngModel)]="form.size" placeholder="Ej: 10x10 cm">
+          </div>
+          <div class="field">
+            <label>Precio ($)</label>
+            <input type="number" [(ngModel)]="form.price" placeholder="0">
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-ghost" (click)="showModal.set(false)">Cancelar</button>
+        <button class="btn btn-primary" (click)="save()">
+          {{ editing() ? 'Guardar cambios' : 'Subir imagen' }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

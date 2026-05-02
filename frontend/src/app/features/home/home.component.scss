@@ -1,0 +1,202 @@
+/* ─── Hero ─── */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 40%, rgba(201,168,76,.06) 0%, transparent 70%),
+    linear-gradient(180deg, #0a0a0a 0%, #080808 100%);
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 60px, rgba(255,255,255,.012) 60px, rgba(255,255,255,.012) 61px),
+      repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(255,255,255,.012) 60px, rgba(255,255,255,.012) 61px);
+  }
+}
+
+.hero-content {
+  position: relative;
+  text-align: center;
+  max-width: 680px;
+  padding: 120px 24px 80px;
+
+  .eyebrow {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 24px;
+  }
+
+  h1 {
+    font-size: clamp(3rem, 7vw, 5.5rem);
+    line-height: 1.05;
+    margin-bottom: 24px;
+    color: var(--white);
+
+    em {
+      font-style: italic;
+      color: var(--gold);
+    }
+  }
+
+  p {
+    font-size: 1.1rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 40px;
+  }
+}
+
+.hero-actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.hero-scroll {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  color: var(--dim);
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.scroll-line {
+  width: 1px;
+  height: 50px;
+  background: linear-gradient(var(--gold), transparent);
+  animation: scrollPulse 2s ease infinite;
+}
+
+@keyframes scrollPulse {
+  0%   { opacity: 0; transform: scaleY(0); transform-origin: top; }
+  50%  { opacity: 1; }
+  100% { opacity: 0; transform: scaleY(1); transform-origin: top; }
+}
+
+/* ─── Portfolio grid ─── */
+.portfolio-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.portfolio-card {
+  position: relative;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 8px;
+  cursor: pointer;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform .5s ease;
+  }
+
+  &:hover img { transform: scale(1.08); }
+
+  &:hover .portfolio-overlay { opacity: 1; }
+}
+
+.portfolio-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,.85) 0%, transparent 50%);
+  opacity: 0;
+  transition: opacity .3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 20px;
+
+  .description {
+    font-size: 13px;
+    color: var(--off-white);
+    margin-bottom: 8px;
+    line-height: 1.4;
+  }
+
+  .meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .size  { font-size: 12px; color: var(--muted); }
+    .price { font-size: 14px; font-weight: 600; color: var(--gold); }
+  }
+}
+
+/* ─── Services row ─── */
+.section-dark { background: var(--surface); }
+
+.services-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.service-card {
+  text-align: center;
+  padding: 40px 28px;
+
+  .service-icon {
+    font-size: 40px;
+    color: var(--gold);
+    display: block;
+    margin-bottom: 20px;
+  }
+
+  h3 { margin-bottom: 12px; font-size: 1.2rem; }
+  p  { color: var(--muted); font-size: 14px; line-height: 1.7; }
+}
+
+/* ─── CTA ─── */
+.cta-section {
+  background: radial-gradient(ellipse at center, rgba(201,168,76,.08) 0%, transparent 70%);
+}
+
+.cta-box {
+  text-align: center;
+  max-width: 520px;
+  margin: 0 auto;
+
+  h2 { font-size: clamp(1.8rem, 4vw, 2.8rem); margin-bottom: 16px; }
+  p  { color: var(--muted); margin-bottom: 32px; }
+}
+
+.see-more {
+  text-align: center;
+  margin-top: 40px;
+}
+
+@media (max-width: 768px) {
+  .portfolio-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 480px) {
+  .portfolio-grid { grid-template-columns: 1fr; }
+}

@@ -1,0 +1,107 @@
+<div class="admin-page">
+  <div class="container">
+    <div class="page-top">
+      <div>
+        <a routerLink="/admin/dashboard" class="back-btn">Volver al dashboard</a>
+        <h1>Servicios</h1>
+        <p>Gestiona los servicios que ofreces.</p>
+      </div>
+      <button class="btn btn-primary" (click)="openNew()">
+        <span class="material-icons">add</span> Nuevo servicio
+      </button>
+    </div>
+
+    @if (!services.length) {
+      <div class="empty">
+        <span class="material-icons">brush</span>
+        <p>No hay servicios. ¡Crea el primero!</p>
+      </div>
+    }
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Imagen</th>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Precio</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (s of services; track s.id) {
+            <tr>
+              <td>
+                @if (s.imageBase64) {
+                  <img class="thumb" [src]="s.imageBase64" [alt]="s.name">
+                } @else {
+                  <div class="thumb-placeholder"><span class="material-icons">brush</span></div>
+                }
+              </td>
+              <td><strong>{{ s.name }}</strong></td>
+              <td class="desc-cell">{{ s.description }}</td>
+              <td class="price-cell">${{ s.price | number:'1.0-0' }}</td>
+              <td>
+                <div class="row-actions">
+                  <button class="btn btn-ghost" (click)="openEdit(s)">
+                    <span class="material-icons">edit</span>
+                  </button>
+                  <button class="btn btn-danger" (click)="delete(s.id!)">
+                    <span class="material-icons">delete</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+@if (showModal()) {
+  <div class="modal-overlay" (click)="showModal.set(false)">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>{{ editing() ? 'Editar servicio' : 'Nuevo servicio' }}</h3>
+        <button class="close" (click)="showModal.set(false)">✕</button>
+      </div>
+
+      <div class="upload-zone small" (click)="fileInput.click()">
+        @if (previewUrl) {
+          <img [src]="previewUrl" alt="preview">
+        } @else {
+          <div class="upload-placeholder">
+            <span class="material-icons">image</span>
+            <span>Imagen opcional</span>
+          </div>
+        }
+        <input #fileInput type="file" accept="image/*" (change)="onFile($event)" hidden>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:16px;">
+        <div class="field">
+          <label>Nombre del servicio</label>
+          <input type="text" [(ngModel)]="form.name" placeholder="Ej: Tatuaje minimalista">
+        </div>
+        <div class="field">
+          <label>Descripción</label>
+          <textarea [(ngModel)]="form.description" placeholder="Describe este servicio..."></textarea>
+        </div>
+        <div class="field">
+          <label>Precio ($)</label>
+          <input type="number" [(ngModel)]="form.price" placeholder="0" min="0">
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-ghost" (click)="showModal.set(false)">Cancelar</button>
+        <button class="btn btn-primary" (click)="save()">
+          {{ editing() ? 'Guardar cambios' : 'Crear servicio' }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

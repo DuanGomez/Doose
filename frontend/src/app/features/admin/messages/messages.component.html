@@ -1,0 +1,77 @@
+<div class="admin-page">
+  <div class="container">
+    <div class="page-top">
+      <div>
+        <a routerLink="/admin/dashboard" class="back-btn">Volver al dashboard</a>
+        <h1>Mensajes</h1>
+        <p>Mensajes recibidos desde el formulario de contacto.</p>
+      </div>
+      <span class="badge badge-admin">{{ messages.length }} mensajes</span>
+    </div>
+
+    @if (!messages.length) {
+      <div class="empty">
+        <span class="material-icons">mail</span>
+        <p>No hay mensajes aún.</p>
+      </div>
+    }
+
+    <div class="messages-list">
+      @for (msg of messages; track msg.id) {
+        <div class="msg-card" (click)="open(msg)">
+          <div class="msg-avatar">{{ msg.name.charAt(0).toUpperCase() }}</div>
+          <div class="msg-info">
+            <div class="msg-top">
+              <strong>{{ msg.name }}</strong>
+              <span class="msg-date">{{ msg.createdAt | date:'dd/MM/yyyy HH:mm' }}</span>
+            </div>
+            <span class="msg-email">{{ msg.email }}</span>
+            <p class="msg-preview">{{ msg.message }}</p>
+          </div>
+          <span class="material-icons arrow">chevron_right</span>
+        </div>
+      }
+    </div>
+  </div>
+</div>
+
+<!-- Detalle del mensaje -->
+@if (selected) {
+  <div class="modal-overlay" (click)="close()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Mensaje de {{ selected.name }}</h3>
+        <button class="close" (click)="close()">✕</button>
+      </div>
+
+      <div class="msg-detail">
+        <div class="detail-row">
+          <span class="material-icons">person</span>
+          <div><label>Nombre</label><p>{{ selected.name }}</p></div>
+        </div>
+        <div class="detail-row">
+          <span class="material-icons">email</span>
+          <div><label>Correo</label><a [href]="'mailto:' + selected.email">{{ selected.email }}</a></div>
+        </div>
+        @if (selected.phone) {
+          <div class="detail-row">
+            <span class="material-icons">phone</span>
+            <div><label>Teléfono</label><p>{{ selected.phone }}</p></div>
+          </div>
+        }
+        <div class="detail-row">
+          <span class="material-icons">schedule</span>
+          <div><label>Fecha</label><p>{{ selected.createdAt | date:'dd/MM/yyyy HH:mm' }}</p></div>
+        </div>
+        <div class="msg-body">
+          <label>Mensaje</label>
+          <p>{{ selected.message }}</p>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-ghost" (click)="close()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+}

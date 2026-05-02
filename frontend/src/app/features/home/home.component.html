@@ -1,0 +1,84 @@
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content fade-in">
+    <span class="eyebrow">Estudio de Tatuajes</span>
+    <h1>El Arte <em>Vive</em><br>en tu Piel</h1>
+    <p>Tatuajes únicos y personalizados que cuentan tu historia.<br>Donde la creatividad no tiene límites.</p>
+    <div class="hero-actions">
+      <a routerLink="/portafolio" class="btn btn-primary">Ver Portafolio</a>
+      <a routerLink="/contacto"   class="btn btn-outline">Agendar Cita</a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <span>Explorar</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- PORTFOLIO PREVIEW -->
+@if (portfolio.length) {
+  <section class="section">
+    <div class="container">
+      <div class="section-title">
+        <span class="eyebrow">Nuestro Trabajo</span>
+        <h2>Portafolio</h2>
+        <div class="gold-line"></div>
+        <p>Cada tatuaje es una obra única, creada con pasión y precisión.</p>
+      </div>
+      <div class="portfolio-grid">
+        @for (item of portfolio; track item.id) {
+          <div class="portfolio-card">
+            <img [src]="item.imageBase64" [alt]="item.description">
+            <div class="portfolio-overlay">
+              <p class="description">{{ item.description }}</p>
+              <div class="meta">
+                <span class="size">{{ item.size }}</span>
+                <span class="price">${{ item.price | number:'1.0-0' }}</span>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+      <div class="see-more">
+        <a routerLink="/portafolio" class="btn btn-outline">Ver todo el portafolio</a>
+      </div>
+    </div>
+  </section>
+}
+
+<!-- SERVICES PREVIEW -->
+@if (services.length) {
+  <section class="section section-dark">
+    <div class="container">
+      <div class="section-title">
+        <span class="eyebrow">Lo que hacemos</span>
+        <h2>Servicios</h2>
+        <div class="gold-line"></div>
+      </div>
+      <div class="services-row">
+        @for (svc of services; track svc.id) {
+          <div class="service-card card">
+            <span class="service-icon material-icons">brush</span>
+            <h3>{{ svc.name }}</h3>
+            <p>{{ svc.description }}</p>
+          </div>
+        }
+      </div>
+      <div class="see-more">
+        <a routerLink="/servicios" class="btn btn-outline">Ver todos los servicios</a>
+      </div>
+    </div>
+  </section>
+}
+
+<!-- CTA -->
+<section class="section cta-section">
+  <div class="container">
+    <div class="cta-box">
+      <h2>¿Listo para tu próximo tatuaje?</h2>
+      <p>Contáctanos y hagamos realidad tu idea.</p>
+      <a routerLink="/contacto" class="btn btn-primary">Contáctanos</a>
+    </div>
+  </div>
+</section>

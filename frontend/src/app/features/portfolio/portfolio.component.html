@@ -1,0 +1,66 @@
+<div class="page-header">
+  <div class="container">
+    <span class="eyebrow">Nuestra Obra</span>
+    <h1>Portafolio</h1>
+    <div class="gold-line"></div>
+    <p>Cada imagen es una historia contada en piel.</p>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+    @if (!items.length) {
+      <div class="empty">
+        <span class="material-icons">photo_library</span>
+        <p>El portafolio está vacío por ahora.</p>
+      </div>
+    }
+
+    <div class="portfolio-grid">
+      @for (item of items; track item.id) {
+        <div class="portfolio-card fade-in">
+          <div class="img-wrap" (click)="open(item)">
+            <img [src]="item.imageBase64" [alt]="item.description">
+            <div class="overlay">
+              <span class="material-icons zoom-icon">zoom_in</span>
+            </div>
+          </div>
+          <div class="card-info">
+            <p class="desc">{{ item.description }}</p>
+            <div class="meta">
+              <span class="size">{{ item.size }}</span>
+              <span class="price">${{ item.price | number:'1.0-0' }}</span>
+            </div>
+            <button class="fav-btn" [class.active]="isFav(item.id!)" (click)="toggleFavorite(item)">
+              <span class="material-icons">{{ isFav(item.id!) ? 'favorite' : 'favorite_border' }}</span>
+              {{ item.favoritesCount }}
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Lightbox -->
+@if (selected()) {
+  <div class="lightbox" (click)="close()">
+    <button class="lightbox-close" (click)="close()">✕</button>
+    <div class="lightbox-content" (click)="$event.stopPropagation()">
+      <img [src]="selected()!.imageBase64" [alt]="selected()!.description">
+      <div class="lightbox-info">
+        <h3>{{ selected()!.description }}</h3>
+        <div class="lightbox-meta">
+          <span>Tamaño: <strong>{{ selected()!.size }}</strong></span>
+          <span>Precio: <strong class="gold">${{ selected()!.price | number:'1.0-0' }}</strong></span>
+          <span>Favoritos: <strong>{{ selected()!.favoritesCount }}</strong></span>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Toast -->
+@if (toast()) {
+  <div class="toast toast-success">{{ toast() }}</div>
+}
