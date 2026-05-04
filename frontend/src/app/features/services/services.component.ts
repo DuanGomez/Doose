@@ -57,6 +57,11 @@ export class ServicesComponent implements OnInit {
     });
   }
 
+  get filteredTattoers(): Tattoer[] {
+    if (!this.selectedService) return this.tattoers;
+    return this.tattoers.filter(t => t.specialty === this.selectedService!.type);
+  }
+
   get availableHours(): string[] {
     if (!this.selectedService) return this.allHours;
 
@@ -79,18 +84,19 @@ export class ServicesComponent implements OnInit {
   }
 
   openModal(service: TattooServiceExtended) {
-  if (!this.auth.isLoggedIn()) {
-    this.showAuthPrompt.set(true);
-    return;
+    if (!this.auth.isLoggedIn()) {
+      this.showAuthPrompt.set(true);
+      return;
+    }
+    this.selectedService = service;
+    this.selectedDay     = 'Lunes';
+    this.selectedHour    = '08:00';
+    this.quantity        = 1;
+    this.errorMsg.set('');
+    const available = this.tattoers.filter(t => t.specialty === service.type);
+    this.selectedTattoer = available[0] ?? this.tattoers[0];
+    this.showModal.set(true);
   }
-  this.selectedService  = service;
-  this.selectedTattoer  = this.tattoers[0];
-  this.selectedDay      = 'Lunes';
-  this.selectedHour     = '08:00';
-  this.quantity         = 1;
-  this.errorMsg.set('');
-  this.showModal.set(true);
-}
 
   closeModal() {
     this.showModal.set(false);

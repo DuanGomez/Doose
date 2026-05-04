@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { CartService } from '../../core/services/cart.service';
 import { AuthService } from '../../core/services/auth.service';
+import { ToastService } from '../../core/services/toast.service';
 import { CartItem, Appointment } from '../../core/models/models';
 
 @Component({
@@ -15,9 +16,15 @@ import { CartItem, Appointment } from '../../core/models/models';
 export class ReservaComponent implements OnInit {
   items: CartItem[] = [];
   reservaId = '';
-  fecha = new Date().toLocaleDateString('es-CO', { year:'numeric', month:'long', day:'numeric' });
+  fecha = new Date().toLocaleDateString('es-CO', { year: 'numeric', month: 'long', day: 'numeric' });
+  loading = false;
 
-  constructor(private cartService: CartService, private auth: AuthService) {}
+  constructor(
+    private cartService: CartService,
+    private auth: AuthService,
+    private toast: ToastService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.items = this.cartService.getItems();
@@ -28,8 +35,25 @@ export class ReservaComponent implements OnInit {
   get total() { return this.cartService.getTotal(); }
 
   confirmar() {
-    const user = this.auth.currentUser();
+    if (this.loading) return;
+
     const stored: Appointment[] = JSON.parse(localStorage.getItem('appointments') || '[]');
+
+    // Validar que ningún tatuador tenga ese slot ya confirmado
+    const conflicto = this.items.find(item =>
+      stored.some(a => a.tattoerId === item.tattoer.id && a.schedule === item.schedule)
+    );
+    if (conflicto) {
+      this.toast.show(
+        `${conflicto.tattoer.name} ya tiene una cita en ${conflicto.schedule}. Vuelve al carrito y elige otro horario.`,
+        'error'
+      );
+      return;
+    }
+
+    this.loading = true;
+    const user = this.auth.currentUser();
+
     this.items.forEach(item => {
       stored.push({
         id: 'APT-' + Math.random().toString(36).substring(2, 9).toUpperCase(),
@@ -44,8 +68,11 @@ export class ReservaComponent implements OnInit {
         price: item.service.price * item.quantity
       });
     });
+
     localStorage.setItem('appointments', JSON.stringify(stored));
     this.cartService.clear();
-    alert('¡Reserva confirmada! Nos contactaremos pronto.');
+    this.toast.show('¡Reserva confirmada! Nos contactaremos pronto.');
+    this.loading = false;
+    this.router.navigate(['/citas']);
   }
 }

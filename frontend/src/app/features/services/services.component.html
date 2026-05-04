@@ -87,11 +87,15 @@
       <!-- Tatuador -->
       <div class="field" style="margin-top:20px">
         <label>Tatuador</label>
-        <select [(ngModel)]="selectedTattoer" (ngModelChange)="onTattoerChange()">
-          @for (t of tattoers; track t.id) {
-            <option [ngValue]="t">{{ t.name }} — {{ t.specialty }} ({{ t.experience }} años)</option>
-          }
-        </select>
+        @if (filteredTattoers.length > 0) {
+          <select [(ngModel)]="selectedTattoer" (ngModelChange)="onTattoerChange()">
+            @for (t of filteredTattoers; track t.id) {
+              <option [ngValue]="t">{{ t.name }} ({{ t.experience }} años)</option>
+            }
+          </select>
+        } @else {
+          <div class="no-hours">No hay tatuadores con esta especialidad aún.</div>
+        }
       </div>
 
       <!-- Alerta agenda llena -->

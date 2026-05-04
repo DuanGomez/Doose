@@ -49,4 +49,13 @@ public class UserService {
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
     }
+
+    public void updateProfile(String email, String specialty, Integer experience) {
+        User user = dataStore.users.stream()
+                .filter(u -> u.getEmail().equalsIgnoreCase(email))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        user.setSpecialty(specialty);
+        user.setExperience(experience);
+    }
 }

@@ -11,4 +11,7 @@ export class UserService {
 
   getAll() { return this.http.get<ApiResponse<User[]>>(this.API).pipe(map(r => r.data)); }
   getTattoers() { return this.http.get<ApiResponse<User[]>>(`${this.API}/tattoers`).pipe(map(r => r.data)); }
+  updateProfile(specialty: string, experience: number) {
+    return this.http.put<ApiResponse<void>>('http://localhost:8080/api/users/profile', { specialty, experience });
+  }
 }

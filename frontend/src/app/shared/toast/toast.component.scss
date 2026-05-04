@@ -1,0 +1,30 @@
+.toast {
+  position: fixed;
+  bottom: 36px;
+  right: 36px;
+  background: var(--card);
+  border: 1px solid var(--border-gold);
+  color: var(--off-white);
+  padding: 14px 20px;
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  z-index: 9999;
+  animation: slideUp 0.3s ease;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  max-width: 340px;
+
+  .material-icons { color: var(--gold); font-size: 20px; flex-shrink: 0; }
+}
+
+.toast-error {
+  border-color: #c0392b;
+  .material-icons { color: #e74c3c; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

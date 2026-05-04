@@ -46,6 +46,22 @@ form {
   color: var(--muted);
 }
 
+select {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--off-white);
+  padding: 10px 14px;
+  font-size: 14px;
+  font-family: inherit;
+  appearance: none;
+  cursor: pointer;
+
+  &:focus { outline: none; border-color: var(--gold); }
+  option { background: var(--surface); }
+}
+
 .alert-error {
   background: rgba(224,82,82,.12);
   border: 1px solid rgba(224,82,82,.3);

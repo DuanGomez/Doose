@@ -1,0 +1,12 @@
+@if (svc.state()) {
+  <div class="confirm-overlay" (click)="svc.respond(false)">
+    <div class="confirm-modal" (click)="$event.stopPropagation()">
+      <span class="material-icons confirm-icon">help_outline</span>
+      <p>{{ svc.state()!.message }}</p>
+      <div class="confirm-actions">
+        <button class="btn btn-ghost" (click)="svc.respond(false)">Cancelar</button>
+        <button class="btn btn-danger" (click)="svc.respond(true)">Confirmar</button>
+      </div>
+    </div>
+  </div>
+}

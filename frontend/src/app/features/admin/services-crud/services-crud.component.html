@@ -100,7 +100,12 @@
         </div>
         <div class="field">
           <label>Tipo</label>
-          <input type="text" [(ngModel)]="form.type" placeholder="Ej: Minimalista">
+          <select [(ngModel)]="form.type">
+            <option value="" disabled>Selecciona el tipo</option>
+            @for (s of specialties; track s) {
+              <option [value]="s">{{ s }}</option>
+            }
+          </select>
         </div>
       </div>
 

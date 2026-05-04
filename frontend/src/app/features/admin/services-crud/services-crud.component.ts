@@ -19,6 +19,19 @@ export class ServicesCrudComponent implements OnInit {
   form: Partial<TattooService> = {};
   previewUrl = '';
 
+  specialties = [
+    'Minimalista pequeño',
+    'Frase corta',
+    'Tribal brazo',
+    'Realista pequeño',
+    'Anime mediano',
+    'Geométrico',
+    'Blackwork',
+    'Acuarela',
+    'Retrato realista',
+    'Tatuaje grande espalda'
+  ];
+
   constructor(private svc: TattooServiceService) {}
   ngOnInit() { this.load(); }
 

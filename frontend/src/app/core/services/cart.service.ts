@@ -1,5 +1,5 @@
 import { Injectable, signal, computed } from '@angular/core';
-import { CartItem } from '../models/models';
+import { CartItem, Appointment } from '../models/models';
 
 @Injectable({ providedIn: 'root' })
 export class CartService {
@@ -39,11 +39,19 @@ export class CartService {
     return this.items().reduce((acc, i) => acc + i.service.price * i.quantity, 0);
   }
 
-  // Horas ocupadas de un tatuador en un día específico
+  private storedAppointments(): Appointment[] {
+    return JSON.parse(localStorage.getItem('appointments') || '[]');
+  }
+
+  // Horas ocupadas de un tatuador en un día (carrito + citas confirmadas)
   getOccupiedHours(tattoerId: number, day: string): string[] {
-    return this.items()
+    const fromCart = this.items()
       .filter(i => i.tattoer.id === tattoerId && i.schedule.startsWith(day))
       .map(i => i.schedule.split(' ')[1]);
+    const fromStored = this.storedAppointments()
+      .filter(a => a.tattoerId === tattoerId && a.schedule.startsWith(day))
+      .map(a => a.schedule.split(' ')[1]);
+    return [...new Set([...fromCart, ...fromStored])];
   }
 
   // Cuántos servicios tiene un tatuador en un día
@@ -53,11 +61,11 @@ export class CartService {
       .length;
   }
 
-  // Verificar si un slot está tomado
+  // Slot tomado si está en el carrito O en citas ya confirmadas
   isSlotTaken(tattoerId: number, day: string, hour: string): boolean {
-    return this.items().some(
-      i => i.tattoer.id === tattoerId && i.schedule === `${day} ${hour}`
-    );
+    const schedule = `${day} ${hour}`;
+    if (this.items().some(i => i.tattoer.id === tattoerId && i.schedule === schedule)) return true;
+    return this.storedAppointments().some(a => a.tattoerId === tattoerId && a.schedule === schedule);
   }
 
   clear() { this.items.set([]); }

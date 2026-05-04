@@ -1,35 +1,66 @@
 <div class="auth-page">
   <div class="auth-card fade-in">
-    <div class="auth-header">
-      <span class="logo-icon">✦</span>
-      <h2>Crear cuenta</h2>
-      <p>Únete a la comunidad Doose</p>
-    </div>
 
-    @if (error) {
-      <div class="alert-error">{{ error }}</div>
+    @if (step === 1) {
+      <div class="auth-header">
+        <span class="logo-icon">✦</span>
+        <h2>Crear cuenta</h2>
+        <p>Únete a la comunidad Doose</p>
+      </div>
+
+      @if (error) {
+        <div class="alert-error">{{ error }}</div>
+      }
+
+      <form (ngSubmit)="submit()" #f="ngForm">
+        <div class="field">
+          <label>Nombre completo</label>
+          <input type="text" [(ngModel)]="name" name="name" placeholder="Tu nombre" required>
+        </div>
+        <div class="field">
+          <label>Correo electrónico</label>
+          <input type="email" [(ngModel)]="email" name="email" placeholder="tu@email.com" required>
+        </div>
+        <div class="field">
+          <label>Contraseña</label>
+          <input type="password" [(ngModel)]="password" name="password" placeholder="Mínimo 6 caracteres" required minlength="6">
+        </div>
+        <button type="submit" class="btn btn-primary full" [disabled]="loading || !f.valid">
+          {{ loading ? 'Cargando...' : 'Crear cuenta' }}
+        </button>
+      </form>
+
+      <p class="auth-footer">
+        ¿Ya tienes cuenta? <a routerLink="/login">Inicia sesión</a>
+      </p>
     }
 
-    <form (ngSubmit)="submit()" #f="ngForm">
-      <div class="field">
-        <label>Nombre completo</label>
-        <input type="text" [(ngModel)]="name" name="name" placeholder="Tu nombre" required>
+    @if (step === 2) {
+      <div class="auth-header">
+        <span class="logo-icon">✦</span>
+        <h2>Completa tu perfil</h2>
+        <p>Cuéntanos sobre tu especialidad como tatuador</p>
       </div>
-      <div class="field">
-        <label>Correo electrónico</label>
-        <input type="email" [(ngModel)]="email" name="email" placeholder="tu@email.com" required>
-      </div>
-      <div class="field">
-        <label>Contraseña</label>
-        <input type="password" [(ngModel)]="password" name="password" placeholder="Mínimo 6 caracteres" required minlength="6">
-      </div>
-      <button type="submit" class="btn btn-primary full" [disabled]="loading || !f.valid">
-        {{ loading ? 'Cargando...' : 'Crear cuenta' }}
-      </button>
-    </form>
 
-    <p class="auth-footer">
-      ¿Ya tienes cuenta? <a routerLink="/login">Inicia sesión</a>
-    </p>
+      <form (ngSubmit)="submitProfile()" #fp="ngForm">
+        <div class="field">
+          <label>Especialidad</label>
+          <select [(ngModel)]="specialty" name="specialty" required>
+            <option value="" disabled>Selecciona tu especialidad</option>
+            @for (s of specialties; track s) {
+              <option [value]="s">{{ s }}</option>
+            }
+          </select>
+        </div>
+        <div class="field">
+          <label>Años de experiencia</label>
+          <input type="number" [(ngModel)]="experience" name="experience" placeholder="Ej: 3" min="0" max="50" required>
+        </div>
+        <button type="submit" class="btn btn-primary full" [disabled]="loading || !fp.valid">
+          {{ loading ? 'Guardando...' : 'Guardar y continuar →' }}
+        </button>
+      </form>
+    }
+
   </div>
 </div>

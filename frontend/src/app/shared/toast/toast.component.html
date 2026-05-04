@@ -1,0 +1,8 @@
+@if (svc.toast()) {
+  <div class="toast" [class.toast-error]="svc.toast()!.type === 'error'">
+    <span class="material-icons">
+      {{ svc.toast()!.type === 'error' ? 'error_outline' : 'check_circle' }}
+    </span>
+    {{ svc.toast()!.message }}
+  </div>
+}
