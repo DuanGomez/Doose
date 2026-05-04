@@ -28,6 +28,21 @@ public class UserService {
                 .toList();
     }
 
+  public List<User> getTattoers() {
+    return dataStore.users.stream()
+            .filter(u -> u.getRole() == User.Role.TATTOER)
+            .map(u -> User.builder()
+                    .id(u.getId())
+                    .name(u.getName())
+                    .email(u.getEmail())
+                    .role(u.getRole())
+                    .createdAt(u.getCreatedAt())
+                    .specialty(u.getSpecialty())
+                    .experience(u.getExperience())
+                    .build())
+            .toList();
+    }
+
     public User findByEmail(String email) {
         return dataStore.users.stream()
                 .filter(u -> u.getEmail().equalsIgnoreCase(email))

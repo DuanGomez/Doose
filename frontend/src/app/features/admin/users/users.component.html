@@ -24,8 +24,8 @@
               <td><strong>{{ u.name }}</strong></td>
               <td class="muted">{{ u.email }}</td>
               <td>
-                <span [class]="'badge badge-' + u.role.toLowerCase()">
-                  {{ u.role === 'ADMIN' ? 'Administrador' : 'Usuario' }}
+                <span [class]="'badge ' + (u.role === 'ADMIN' ? 'badge-admin' : u.role === 'TATTOER' ? 'badge-tattoer' : 'badge-user')">
+                  {{ u.role === 'ADMIN' ? 'Administrador' : u.role === 'TATTOER' ? 'Tatuador' : 'Usuario' }}
                 </span>
               </td>
               <td class="muted">{{ u.createdAt | date:'dd/MM/yyyy' }}</td>

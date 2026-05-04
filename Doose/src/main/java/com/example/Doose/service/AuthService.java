@@ -28,7 +28,7 @@ public class AuthService {
                 .name(req.getName())
                 .email(req.getEmail())
                 .password(passwordEncoder.encode(req.getPassword()))
-                .role(User.Role.USER)
+                .role(req.getEmail().toLowerCase().endsWith("@tattoo.com") ? User.Role.TATTOER : User.Role.USER)
                 .createdAt(java.time.LocalDateTime.now())
                 .build();
 

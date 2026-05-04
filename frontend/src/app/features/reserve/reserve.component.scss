@@ -1,0 +1,85 @@
+.page-header {
+  padding: 130px 0 60px;
+  text-align: center;
+  background: linear-gradient(180deg, rgba(201,168,76,.05) 0%, transparent 100%);
+  .eyebrow { display:block; font-size:11px; letter-spacing:3px; text-transform:uppercase; color:var(--gold); margin-bottom:12px; }
+  h1 { font-size: clamp(2.5rem, 5vw, 4rem); }
+}
+
+.factura {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.factura-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.logo-block {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  .logo-icon { color: var(--gold); font-size: 22px; }
+  .logo-text  { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700; letter-spacing: 2px; color: var(--white); }
+}
+
+.factura-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: right;
+  div { display: flex; gap: 12px; justify-content: flex-end; font-size: 13px; }
+  span { color: var(--muted); }
+  strong { color: var(--gold); }
+}
+
+.tattoer-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.avatar {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--gold-glow);
+  border: 1px solid var(--border-gold);
+  color: var(--gold);
+  font-weight: 700;
+  font-size: 12px;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.price-cell { color: var(--gold) !important; font-weight: 600; }
+
+.total-block {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 24px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-gold);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.total-price {
+  font-size: 2rem;
+  font-family: 'Playfair Display', serif;
+  color: var(--gold);
+}
+
+.factura-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 32px;
+  flex-wrap: wrap;
+  gap: 16px;
+}

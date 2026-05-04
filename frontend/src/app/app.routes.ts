@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
-import { adminGuard } from './core/guards/admin.guard';
+import { adminGuard, tattoerGuard } from './core/guards/admin.guard';
 
 export const routes: Routes = [
   { path: '', loadComponent: () => import('./features/home/home.component').then(m => m.HomeComponent) },
@@ -26,5 +26,9 @@ export const routes: Routes = [
       { path: 'mensajes',   loadComponent: () => import('./features/admin/messages/messages.component').then(m => m.MessagesComponent) }
     ]
   },
+{ path: 'reservar', loadComponent: () => import('./features/services/services.component').then(m => m.ServicesComponent) },
+{ path: 'carrito',  loadComponent: () => import('./features/cart/cart.component').then(m => m.CartComponent) },
+{ path: 'reserva',  loadComponent: () => import('./features/reserve/reserve.component').then(m => m.ReservaComponent) },
+{ path: 'citas', loadComponent: () => import('./features/dates/dates.component').then(m => m.CitasComponent), canActivate: [tattoerGuard] },
   { path: '**', redirectTo: '' }
 ];

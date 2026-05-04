@@ -10,4 +10,5 @@ export class UserService {
   constructor(private http: HttpClient) {}
 
   getAll() { return this.http.get<ApiResponse<User[]>>(this.API).pipe(map(r => r.data)); }
+  getTattoers() { return this.http.get<ApiResponse<User[]>>(`${this.API}/tattoers`).pipe(map(r => r.data)); }
 }

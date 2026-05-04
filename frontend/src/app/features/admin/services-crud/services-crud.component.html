@@ -94,6 +94,14 @@
           <label>Precio ($)</label>
           <input type="number" [(ngModel)]="form.price" placeholder="0" min="0">
         </div>
+        <div class="field">
+          <label>Duración (minutos)</label>
+          <input type="number" [(ngModel)]="form.duration" placeholder="Ej: 60" min="0">
+        </div>
+        <div class="field">
+          <label>Tipo</label>
+          <input type="text" [(ngModel)]="form.type" placeholder="Ej: Minimalista">
+        </div>
       </div>
 
       <div class="modal-footer">

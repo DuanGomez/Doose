@@ -1,0 +1,87 @@
+<div class="page-header">
+  <div class="container">
+    <span class="eyebrow">Confirmar</span>
+    <h1>Resumen de Reserva</h1>
+    <div class="gold-line"></div>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+
+    @if (items.length === 0) {
+      <div class="empty">
+        <span class="material-icons">receipt_long</span>
+        <p>No hay servicios en tu reserva.</p>
+        <a routerLink="/reservar" class="btn btn-primary" style="margin-top:24px">Ver catálogo</a>
+      </div>
+    } @else {
+
+      <div class="factura card">
+
+        <div class="factura-header">
+          <div class="logo-block">
+            <span class="logo-icon">✦</span>
+            <span class="logo-text">DOOSE TATTOO</span>
+          </div>
+          <div class="factura-meta">
+            <div><span>Reserva N°</span><strong>{{ reservaId }}</strong></div>
+            <div><span>Fecha</span><strong>{{ fecha }}</strong></div>
+          </div>
+        </div>
+
+        <div class="gold-line" style="margin:24px 0"></div>
+
+        <h3 style="margin-bottom:16px">Servicios seleccionados</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Servicio</th>
+                <th>Tipo</th>
+                <th>Tatuador</th>
+                <th>Horario</th>
+                <th>Duración</th>
+                <th>Cant.</th>
+                <th>Subtotal</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (item of items; track item.service.id) {
+                <tr>
+                  <td><strong>{{ item.service.name }}</strong></td>
+                  <td>{{ item.service.type }}</td>
+                  <td>
+                    <div class="tattoer-cell">
+                      <span class="avatar">{{ item.tattoer.avatar }}</span>
+                      {{ item.tattoer.name }}
+                    </div>
+                  </td>
+                  <td>{{ item.schedule }}</td>
+                  <td>{{ item.service.duration }} min</td>
+                  <td>{{ item.quantity }}</td>
+                  <td class="price-cell">${{ subtotal(item) | number:'1.0-0' }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <div class="total-block">
+          <span>Total a pagar</span>
+          <span class="total-price">${{ total | number:'1.0-0' }}</span>
+        </div>
+
+        <div class="factura-actions">
+          <a routerLink="/carrito" class="btn btn-ghost">← Volver al carrito</a>
+          <button class="btn btn-primary" (click)="confirmar()">
+            <span class="material-icons" style="font-size:16px">check_circle</span>
+            Confirmar Reserva
+          </button>
+        </div>
+
+      </div>
+    }
+
+  </div>
+</section>

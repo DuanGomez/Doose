@@ -1,0 +1,93 @@
+<div class="admin-page">
+  <div class="container">
+
+    <div class="admin-header">
+      <h1><span class="material-icons hicon">calendar_month</span> Citas Agendadas</h1>
+      <p>
+        @if (auth.isAdmin()) {
+          Panel de administrador — todas las citas del estudio.
+        } @else {
+          Bienvenido, <strong>{{ auth.currentUser()?.name }}</strong> — tus citas de la semana.
+        }
+      </p>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span class="material-icons">event_available</span>
+        <div>
+          <span class="stat-value">{{ totalCitas }}</span>
+          <span class="stat-label">Total citas</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <span class="material-icons">today</span>
+        <div>
+          <span class="stat-value">{{ citasHoy }}</span>
+          <span class="stat-label">Citas hoy</span>
+        </div>
+      </div>
+      @if (auth.isAdmin()) {
+        <div class="stat-card stat-danger" (click)="clearAll()">
+          <span class="material-icons">delete_sweep</span>
+          <div>
+            <span class="stat-value">Limpiar</span>
+            <span class="stat-label">Eliminar todas las citas</span>
+          </div>
+        </div>
+      }
+    </div>
+
+    <div class="gold-line" style="margin: 0 0 40px;"></div>
+
+    @if (allAppointments.length === 0) {
+      <div class="empty">
+        <span class="material-icons">event_busy</span>
+        <p>No hay citas agendadas para esta semana.</p>
+      </div>
+    } @else {
+      <div class="calendar-wrap">
+        <div class="calendar-grid">
+
+          <div class="time-col-header"></div>
+          @for (day of days; track day) {
+            <div class="day-header">{{ day }}</div>
+          }
+
+          @for (hour of hours; track hour) {
+            <div class="time-label">{{ hour }}</div>
+            @for (day of days; track day) {
+              <div class="cal-cell" [class.has-apt]="getApts(day, hour).length > 0">
+                @for (apt of getApts(day, hour); track apt.id) {
+                  <div class="apt-card">
+                    <div class="apt-time">
+                      <span class="material-icons">schedule</span>{{ hour }}
+                    </div>
+                    <div class="apt-service">{{ apt.serviceName }}</div>
+                    <span class="badge badge-tattoer">{{ apt.serviceType }}</span>
+                    <div class="apt-user">
+                      <span class="material-icons">person</span>{{ apt.userName }}
+                    </div>
+                    @if (auth.isAdmin()) {
+                      <div class="apt-tattoer">
+                        <span class="material-icons">brush</span>{{ apt.tattoerName }}
+                      </div>
+                    }
+                    <div class="apt-id">{{ apt.id }}</div>
+                  </div>
+                  @if (auth.isAdmin()) {
+                      <button class="apt-delete" (click)="deleteApt(apt.id)">
+                        <span class="material-icons">delete</span>
+                      </button>
+                    }
+                }
+              </div>
+            }
+          }
+
+        </div>
+      </div>
+    }
+
+  </div>
+</div>
