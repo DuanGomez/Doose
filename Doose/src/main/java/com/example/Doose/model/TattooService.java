@@ -13,6 +13,8 @@ public class TattooService {
     private String description;
     private String imageBase64;
     private Double price;
+    private Integer duration;
+    private String type;
 
     @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();

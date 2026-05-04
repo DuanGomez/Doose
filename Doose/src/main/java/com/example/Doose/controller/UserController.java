@@ -22,4 +22,10 @@ public class UserController {
     public ResponseEntity<ApiResponse<List<User>>> getAll() {
         return ResponseEntity.ok(ApiResponse.ok(userService.getAll()));
     }
+
+    @GetMapping("/tattoers")
+@PreAuthorize("isAuthenticated()")
+public ResponseEntity<ApiResponse<List<User>>> getTattoers() {
+    return ResponseEntity.ok(ApiResponse.ok(userService.getTattoers()));
+}
 }

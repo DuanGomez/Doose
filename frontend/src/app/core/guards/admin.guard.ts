@@ -9,3 +9,11 @@ export const adminGuard: CanActivateFn = () => {
   router.navigate(['/']);
   return false;
 };
+
+export const tattoerGuard: CanActivateFn = () => {
+  const auth = inject(AuthService);
+  const router = inject(Router);
+  if (auth.isAdmin() || auth.isTattoer()) return true;
+  router.navigate(['/']);
+  return false;
+};

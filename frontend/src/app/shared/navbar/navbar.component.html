@@ -18,10 +18,19 @@
       @if (auth.isAdmin()) {
         <li class="admin-link"><a routerLink="/admin" routerLinkActive="active">Admin</a></li>
       }
+      @if (auth.isAdmin() || auth.isTattoer()) {
+        <li class="admin-link"><a routerLink="/citas" routerLinkActive="active">Citas</a></li>
+      }
     </ul>
 
     <!-- Auth actions -->
     <div class="nav-actions">
+      <a routerLink="/carrito" class="cart-icon">
+        <span class="material-icons">shopping_cart</span>
+        @if (cart.count() > 0) {
+          <span class="cart-badge">{{ cart.count() }}</span>
+        }
+      </a>
       @if (auth.isLoggedIn()) {
         <span class="user-name">{{ auth.currentUser()?.name }}</span>
         <button class="btn btn-ghost btn-sm" (click)="auth.logout()">Salir</button>
@@ -49,6 +58,9 @@
       }
       @if (auth.isAdmin()) {
         <a routerLink="/admin" (click)="closeMenu()">Admin</a>
+      }
+      @if (auth.isAdmin() || auth.isTattoer()) {
+        <a routerLink="/citas" (click)="closeMenu()">Citas</a>
       }
       <div class="mobile-auth">
         @if (auth.isLoggedIn()) {

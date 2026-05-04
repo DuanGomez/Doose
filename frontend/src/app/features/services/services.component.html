@@ -9,19 +9,12 @@
 
 <section class="section">
   <div class="container">
-    @if (!services.length) {
-      <div class="empty">
-        <span class="material-icons">build</span>
-        <p>No hay servicios disponibles por ahora.</p>
-      </div>
-    }
-
     <div class="services-grid">
-      @for (svc of services; track svc.id) {
+      @for (item of catalog; track item.id) {
         <div class="service-card card fade-in">
-          @if (svc.imageBase64) {
+          @if (item.imageBase64) {
             <div class="svc-img">
-              <img [src]="svc.imageBase64" [alt]="svc.name">
+              <img [src]="item.imageBase64" [alt]="item.name">
             </div>
           } @else {
             <div class="svc-icon-wrap">
@@ -29,17 +22,123 @@
             </div>
           }
           <div class="svc-body">
-            <h3>{{ svc.name }}</h3>
-            <p>{{ svc.description }}</p>
+            <h3>{{ item.name }}</h3>
+            <p>{{ item.description }}</p>
+            <span class="svc-type">{{ item.type }} · {{ item.duration }} min</span>
           </div>
           <div class="svc-footer">
-            @if (svc.price) {
-              <span class="svc-price">Desde ${{ svc.price | number:'1.0-0' }}</span>
-            }
-            <a routerLink="/contacto" class="btn btn-outline btn-sm">Consultar</a>
+            <span class="svc-price">${{ item.price | number:'1.0-0' }}</span>
+            <button class="btn btn-primary btn-sm" (click)="openModal(item)">
+              + Carrito
+            </button>
           </div>
         </div>
       }
     </div>
   </div>
 </section>
+
+<!-- Toast -->
+@if (toast()) {
+  <div class="toast toast-success">{{ toast() }}</div>
+}
+
+<!-- Auth Prompt -->
+@if (showAuthPrompt()) {
+  <div class="modal-overlay" (click)="showAuthPrompt.set(false)">
+    <div class="modal" (click)="$event.stopPropagation()">
+
+      <div class="modal-header">
+        <h3>Acceso requerido</h3>
+        <button class="close" (click)="showAuthPrompt.set(false)">✕</button>
+      </div>
+
+      <div class="modal-body" style="text-align:center; padding: 24px 0">
+        <span class="material-icons" style="font-size:48px; color:var(--gold)">lock</span>
+        <p style="margin: 16px 0 32px; color:var(--text-muted)">
+          Debes iniciar sesión o crear una cuenta para agendar un servicio.
+        </p>
+        <div class="modal-footer">
+          <a routerLink="/login" class="btn btn-primary">Iniciar sesión</a>
+          <a routerLink="/registro" class="btn btn-ghost">Crear cuenta</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+}
+
+<!-- Modal -->
+@if (showModal()) {
+  <div class="modal-overlay" (click)="closeModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+
+      <div class="modal-header">
+        <h3>Reservar: {{ selectedService?.name }}</h3>
+        <button class="close" (click)="closeModal()">✕</button>
+      </div>
+
+      <div class="svc-info-bar">
+        <span> {{ selectedService?.duration }} min</span>
+        <span>${{ selectedService?.price | number:'1.0-0' }}</span>
+        <span class="badge badge-admin">{{ selectedService?.type }}</span>
+      </div>
+
+      <!-- Tatuador -->
+      <div class="field" style="margin-top:20px">
+        <label>Tatuador</label>
+        <select [(ngModel)]="selectedTattoer" (ngModelChange)="onTattoerChange()">
+          @for (t of tattoers; track t.id) {
+            <option [ngValue]="t">{{ t.name }} — {{ t.specialty }} ({{ t.experience }} años)</option>
+          }
+        </select>
+      </div>
+
+      <!-- Alerta agenda llena -->
+      @if (tattoerFullDay) {
+        <div class="alert-warn">
+           {{ selectedTattoer.name }} ya tiene 3 servicios el {{ selectedDay }}. Cambia de día o tatuador.
+        </div>
+      }
+
+      <!-- Día y Hora -->
+      <div class="modal-row">
+        <div class="field">
+          <label>Día</label>
+          <select [(ngModel)]="selectedDay" (ngModelChange)="onDayChange()">
+            @for (d of days; track d) { <option>{{ d }}</option> }
+          </select>
+        </div>
+        <div class="field">
+          <label>Hora disponible</label>
+          @if (availableHours.length > 0) {
+            <select [(ngModel)]="selectedHour">
+              @for (h of availableHours; track h) { <option>{{ h }}</option> }
+            </select>
+          } @else {
+            <div class="no-hours">Sin horarios disponibles</div>
+          }
+        </div>
+      </div>
+
+      <div class="hours-note">
+         Horario disponible hasta las 18:00 · máx. 3 servicios por tatuador por día
+      </div>
+
+      <!-- Error -->
+      @if (errorMsg()) {
+        <div class="alert-error">{{ errorMsg() }}</div>
+      }
+
+      <div class="modal-footer">
+        <button class="btn btn-ghost" (click)="closeModal()">Cancelar</button>
+        <button class="btn btn-primary"
+                [disabled]="availableHours.length === 0 || tattoerFullDay"
+                (click)="addToCart()">
+          Agregar al carrito
+        </button>
+      </div>
+
+    </div>
+  </div>
+}

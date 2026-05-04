@@ -32,6 +32,7 @@ export class AuthService {
 
   isLoggedIn() { return !!this.currentUser(); }
   isAdmin()    { return this.currentUser()?.role === 'ADMIN'; }
+  isTattoer()  { return this.currentUser()?.role === 'TATTOER'; }
 
   private setSession(user: AuthResponse) {
     localStorage.setItem('token', user.token);

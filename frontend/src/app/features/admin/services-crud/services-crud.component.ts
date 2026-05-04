@@ -25,7 +25,7 @@ export class ServicesCrudComponent implements OnInit {
   load() { this.svc.getAll().subscribe(d => this.services = d); }
 
   openNew() {
-    this.form = { name: '', description: '' };
+    this.form = { name: '', description: '', duration: undefined, type: '' };
     this.previewUrl = '';
     this.editing.set(null);
     this.showModal.set(true);

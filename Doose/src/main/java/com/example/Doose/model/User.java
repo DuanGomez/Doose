@@ -14,6 +14,8 @@ public class User {
     private String password;
     private Role role;
     private LocalDateTime createdAt;
+    private String specialty;
+    private Integer experience;
 
-    public enum Role { ADMIN, USER }
+    public enum Role { ADMIN, USER, TATTOER }
 }

@@ -1,0 +1,94 @@
+<div class="page-header">
+  <div class="container">
+    <span class="eyebrow">Mi selección</span>
+    <h1>Carrito de Reserva</h1>
+    <div class="gold-line"></div>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+
+    @if (items.length === 0) {
+      <div class="empty">
+        <span class="material-icons">shopping_cart</span>
+        <p>Tu carrito está vacío.</p>
+        <a routerLink="/reservar" class="btn btn-primary" style="margin-top:24px">Ver catálogo</a>
+      </div>
+    } @else {
+
+      <div class="cart-layout">
+
+        <div class="cart-items">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Servicio</th>
+                  <th>Tatuador</th>
+                  <th>Horario</th>
+                  <th>Precio unit.</th>
+                  <th>Cant.</th>
+                  <th>Subtotal</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (item of items; track item.service.id) {
+                  <tr>
+                    <td>
+                      <div class="item-name">{{ item.service.name }}</div>
+                      <div class="item-type">{{ item.service.type }}</div>
+                    </td>
+                    <td>
+                      <div class="tattoer-cell">
+                        <span class="avatar">{{ item.tattoer.avatar }}</span>
+                        {{ item.tattoer.name }}
+                      </div>
+                    </td>
+                    <td>{{ item.schedule }}</td>
+                    <td class="price-cell">${{ item.service.price | number:'1.0-0' }}</td>
+                    <td>
+                      <div class="qty-control">
+                        <button (click)="updateQty(item, item.quantity - 1)">−</button>
+                        <span>{{ item.quantity }}</span>
+                        <button (click)="updateQty(item, item.quantity + 1)">+</button>
+                      </div>
+                    </td>
+                    <td class="price-cell">${{ subtotal(item) | number:'1.0-0' }}</td>
+                    <td>
+                      <button class="btn btn-danger btn-sm" (click)="remove(item)">
+                        <span class="material-icons" style="font-size:16px">delete</span>
+                      </button>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="cart-summary card">
+          <h3>Resumen</h3>
+          <div class="gold-line" style="margin:16px 0"></div>
+          <div class="summary-row">
+            <span>Servicios ({{ items.length }})</span>
+            <span>${{ total | number:'1.0-0' }}</span>
+          </div>
+          <div class="summary-total">
+            <span>Total</span>
+            <span class="total-price">${{ total | number:'1.0-0' }}</span>
+          </div>
+          <a routerLink="/reserva" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:24px">
+            Confirmar Reserva →
+          </a>
+          <a routerLink="/reservar" class="btn btn-ghost" style="width:100%;justify-content:center;margin-top:12px">
+            Agregar más servicios
+          </a>
+        </div>
+
+      </div>
+    }
+
+  </div>
+</section>
