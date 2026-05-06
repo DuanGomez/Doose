@@ -27,9 +27,7 @@
                   <th>Servicio</th>
                   <th>Tatuador</th>
                   <th>Horario</th>
-                  <th>Precio unit.</th>
-                  <th>Cant.</th>
-                  <th>Subtotal</th>
+                  <th>Precio</th>
                   <th></th>
                 </tr>
               </thead>
@@ -48,14 +46,6 @@
                     </td>
                     <td>{{ item.schedule }}</td>
                     <td class="price-cell">${{ item.service.price | number:'1.0-0' }}</td>
-                    <td>
-                      <div class="qty-control">
-                        <button (click)="updateQty(item, item.quantity - 1)">−</button>
-                        <span>{{ item.quantity }}</span>
-                        <button (click)="updateQty(item, item.quantity + 1)">+</button>
-                      </div>
-                    </td>
-                    <td class="price-cell">${{ subtotal(item) | number:'1.0-0' }}</td>
                     <td>
                       <button class="btn btn-danger btn-sm" (click)="remove(item)">
                         <span class="material-icons" style="font-size:16px">delete</span>
