@@ -1,12 +1,12 @@
 package com.example.Doose.service;
 
 import com.example.Doose.model.PortfolioItem;
-import com.example.Doose.store.DataStore;
+import com.example.Doose.repository.FavoriteRepository;
+import com.example.Doose.repository.PortfolioItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,18 +14,17 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PortfolioService {
 
-    private final DataStore dataStore;
+    private final PortfolioItemRepository portfolioItemRepository;
+    private final FavoriteRepository favoriteRepository;
 
     public List<PortfolioItem> getAll() {
-        return dataStore.portfolio;
+        return portfolioItemRepository.findAll();
     }
 
     public PortfolioItem create(PortfolioItem item) {
-        item.setId(dataStore.nextPortfolioId());
         item.setFavoritesCount(item.getFavoritesCount() != null ? item.getFavoritesCount() : 0);
         item.setCreatedAt(LocalDateTime.now());
-        dataStore.portfolio.add(item);
-        return item;
+        return portfolioItemRepository.save(item);
     }
 
     public PortfolioItem update(Long id, PortfolioItem updated) {
@@ -36,25 +35,23 @@ public class PortfolioService {
         if (updated.getImageBase64() != null && !updated.getImageBase64().isBlank()) {
             existing.setImageBase64(updated.getImageBase64());
         }
-        return existing;
+        return portfolioItemRepository.save(existing);
     }
 
     public void delete(Long id) {
-        dataStore.portfolio.removeIf(p -> p.getId().equals(id));
-        dataStore.favorites.removeIf(f -> f.getPortfolioItemId().equals(id));
+        favoriteRepository.deleteByPortfolioItemId(id);
+        portfolioItemRepository.deleteById(id);
     }
 
     public Optional<PortfolioItem> getMostFavoritedThisWeek() {
         LocalDateTime weekAgo = LocalDateTime.now().minusDays(7);
-        return dataStore.portfolio.stream()
-                .filter(p -> p.getCreatedAt().isAfter(weekAgo))
-                .max(Comparator.comparingInt(PortfolioItem::getFavoritesCount));
+        return portfolioItemRepository.findByCreatedAtAfterOrderByFavoritesCountDesc(weekAgo)
+                .stream()
+                .findFirst();
     }
 
     public PortfolioItem findById(Long id) {
-        return dataStore.portfolio.stream()
-                .filter(p -> p.getId().equals(id))
-                .findFirst()
+        return portfolioItemRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Ítem de portafolio no encontrado"));
     }
 }

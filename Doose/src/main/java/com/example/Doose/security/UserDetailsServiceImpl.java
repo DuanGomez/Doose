@@ -1,7 +1,7 @@
 package com.example.Doose.security;
 
 import com.example.Doose.model.User;
-import com.example.Doose.store.DataStore;
+import com.example.Doose.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.*;
@@ -13,13 +13,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private final DataStore dataStore;
+    private final UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = dataStore.users.stream()
-                .filter(u -> u.getEmail().equals(email))
-                .findFirst()
+        User user = userRepository.findByEmailIgnoreCase(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + email));
 
         return new org.springframework.security.core.userdetails.User(

@@ -2,9 +2,13 @@ package com.example.Doose.service;
 
 import com.example.Doose.model.Favorite;
 import com.example.Doose.model.PortfolioItem;
-import com.example.Doose.store.DataStore;
+import com.example.Doose.model.User;
+import com.example.Doose.repository.FavoriteRepository;
+import com.example.Doose.repository.PortfolioItemRepository;
+import com.example.Doose.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -12,40 +16,43 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FavoriteService {
 
-    private final DataStore dataStore;
-    private final PortfolioService portfolioService;
+    private final FavoriteRepository favoriteRepository;
+    private final UserRepository userRepository;
+    private final PortfolioItemRepository portfolioItemRepository;
 
     public List<PortfolioItem> getFavoritesByUser(Long userId) {
-        return dataStore.favorites.stream()
-                .filter(f -> f.getUserId().equals(userId))
-                .map(f -> portfolioService.findById(f.getPortfolioItemId()))
+        return favoriteRepository.findByUserId(userId).stream()
+                .map(Favorite::getPortfolioItem)
                 .toList();
     }
 
+    @Transactional
     public Favorite add(Long userId, Long portfolioItemId) {
-        boolean exists = dataStore.favorites.stream()
-                .anyMatch(f -> f.getUserId().equals(userId) && f.getPortfolioItemId().equals(portfolioItemId));
-        if (exists) throw new RuntimeException("Ya está en favoritos");
+        if (favoriteRepository.findByUserIdAndPortfolioItemId(userId, portfolioItemId).isPresent()) {
+            throw new RuntimeException("Ya está en favoritos");
+        }
 
-        PortfolioItem item = portfolioService.findById(portfolioItemId);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        PortfolioItem item = portfolioItemRepository.findById(portfolioItemId)
+                .orElseThrow(() -> new RuntimeException("Ítem de portafolio no encontrado"));
+
         item.setFavoritesCount((item.getFavoritesCount() != null ? item.getFavoritesCount() : 0) + 1);
+        portfolioItemRepository.save(item);
 
         Favorite fav = Favorite.builder()
-                .id(dataStore.nextFavoriteId())
-                .userId(userId)
-                .portfolioItemId(portfolioItemId)
-                .createdAt(java.time.LocalDateTime.now())
+                .user(user)
+                .portfolioItem(item)
                 .build();
-        dataStore.favorites.add(fav);
-        return fav;
+        return favoriteRepository.save(fav);
     }
 
+    @Transactional
     public void remove(Long userId, Long portfolioItemId) {
-        boolean removed = dataStore.favorites.removeIf(
-                f -> f.getUserId().equals(userId) && f.getPortfolioItemId().equals(portfolioItemId));
-        if (removed) {
-            PortfolioItem item = portfolioService.findById(portfolioItemId);
-            item.setFavoritesCount(Math.max(0, (item.getFavoritesCount() != null ? item.getFavoritesCount() : 0) - 1));
-        }
+        favoriteRepository.deleteByUserIdAndPortfolioItemId(userId, portfolioItemId);
+        PortfolioItem item = portfolioItemRepository.findById(portfolioItemId)
+                .orElseThrow(() -> new RuntimeException("Ítem de portafolio no encontrado"));
+        item.setFavoritesCount(Math.max(0, (item.getFavoritesCount() != null ? item.getFavoritesCount() : 0) - 1));
+        portfolioItemRepository.save(item);
     }
 }

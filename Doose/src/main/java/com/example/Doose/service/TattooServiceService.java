@@ -1,26 +1,26 @@
 package com.example.Doose.service;
 
 import com.example.Doose.model.TattooService;
-import com.example.Doose.store.DataStore;
+import com.example.Doose.repository.TattooServiceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class TattooServiceService {
 
-    private final DataStore dataStore;
+    private final TattooServiceRepository tattooServiceRepository;
 
     public List<TattooService> getAll() {
-        return dataStore.services;
+        return tattooServiceRepository.findAll();
     }
 
     public TattooService create(TattooService service) {
-        service.setId(dataStore.nextServiceId());
-        dataStore.services.add(service);
-        return service;
+        service.setCreatedAt(LocalDateTime.now());
+        return tattooServiceRepository.save(service);
     }
 
     public TattooService update(Long id, TattooService updated) {
@@ -28,17 +28,18 @@ public class TattooServiceService {
         existing.setName(updated.getName());
         existing.setDescription(updated.getDescription());
         existing.setImageBase64(updated.getImageBase64());
-        return existing;
+        existing.setPrice(updated.getPrice());
+        existing.setDuration(updated.getDuration());
+        existing.setType(updated.getType());
+        return tattooServiceRepository.save(existing);
     }
 
     public void delete(Long id) {
-        dataStore.services.removeIf(s -> s.getId().equals(id));
+        tattooServiceRepository.deleteById(id);
     }
 
     private TattooService findById(Long id) {
-        return dataStore.services.stream()
-                .filter(s -> s.getId().equals(id))
-                .findFirst()
+        return tattooServiceRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Servicio no encontrado"));
     }
 }
