@@ -1,3 +1,4 @@
+import { environment } from '../../../../environments/environment';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
@@ -28,7 +29,7 @@ export class MessagesComponent implements OnInit {
   constructor(private http: HttpClient) {}
 
   ngOnInit() {
-    this.http.get<ApiResponse<ContactMessage[]>>('http://localhost:8080/api/contact')
+    this.http.get<ApiResponse<ContactMessage[]>>(`${environment.apiUrl}/contact`)
       .pipe(map(r => r.data))
       .subscribe(data => this.messages = data.reverse());
   }

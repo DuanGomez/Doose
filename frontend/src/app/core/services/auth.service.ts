@@ -1,3 +1,4 @@
+import { environment } from '../../../environments/environment';
 import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -7,7 +8,7 @@ import { CartService } from './cart.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private readonly API = 'http://localhost:8080/api/auth';
+  private readonly API = `${environment.apiUrl}/auth`;
   currentUser = signal<AuthResponse | null>(this.loadUser());
 
   constructor(private http: HttpClient, private router: Router, private cartService: CartService) {}

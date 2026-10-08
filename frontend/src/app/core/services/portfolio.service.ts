@@ -1,3 +1,4 @@
+import { environment } from '../../../environments/environment';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
@@ -5,7 +6,7 @@ import { ApiResponse, PortfolioItem } from '../models/models';
 
 @Injectable({ providedIn: 'root' })
 export class PortfolioService {
-  private readonly API = 'http://localhost:8080/api/portfolio';
+  private readonly API = `${environment.apiUrl}/portfolio`;
 
   constructor(private http: HttpClient) {}
 

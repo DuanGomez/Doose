@@ -1,9 +1,11 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, computed, effect, signal } from '@angular/core';
 import { CartItem, Appointment } from '../models/models';
 
 @Injectable({ providedIn: 'root' })
 export class CartService {
-  private items = signal<CartItem[]>([]);
+  // El carrito se guarda en localStorage para no perderlo al recargar la página.
+  private items = signal<CartItem[]>(JSON.parse(localStorage.getItem('cart') || '[]'));
+  private persist = effect(() => localStorage.setItem('cart', JSON.stringify(this.items())));
 
   count = computed(() => this.items().reduce((acc, i) => acc + i.quantity, 0));
 
@@ -43,29 +45,35 @@ export class CartService {
     return JSON.parse(localStorage.getItem('appointments') || '[]');
   }
 
-  // Horas ocupadas de un tatuador en un día (carrito + citas confirmadas)
-  getOccupiedHours(tattoerId: number, day: string): string[] {
+  private toMinutes(hour: string): number {
+    const [h, m] = hour.split(':').map(Number);
+    return h * 60 + m;
+  }
+
+  /** Bloques ocupados [inicio, fin) de un tatuador en un día: carrito + citas confirmadas. */
+  private busyBlocks(tattoerId: number, day: string): [number, number][] {
     const fromCart = this.items()
-      .filter(i => i.tattoer.id === tattoerId && i.schedule.startsWith(day))
-      .map(i => i.schedule.split(' ')[1]);
+      .filter(i => i.tattoer.id === tattoerId && i.schedule.startsWith(day + ' '))
+      .map(i => [i.schedule.split(' ')[1], i.service.duration] as const);
     const fromStored = this.storedAppointments()
-      .filter(a => a.tattoerId === tattoerId && a.schedule.startsWith(day))
-      .map(a => a.schedule.split(' ')[1]);
-    return [...new Set([...fromCart, ...fromStored])];
+      .filter(a => a.tattoerId === tattoerId && a.schedule.startsWith(day + ' '))
+      .map(a => [a.schedule.split(' ')[1], a.duration] as const);
+    return [...fromCart, ...fromStored].map(([hour, dur]) => {
+      const start = this.toMinutes(hour);
+      return [start, start + dur] as [number, number];
+    });
   }
 
-  // Cuántos servicios tiene un tatuador en un día
+  // Cuántos servicios tiene un tatuador en un día (carrito + citas confirmadas)
   getServiceCountByDay(tattoerId: number, day: string): number {
-    return this.items()
-      .filter(i => i.tattoer.id === tattoerId && i.schedule.startsWith(day))
-      .length;
+    return this.busyBlocks(tattoerId, day).length;
   }
 
-  // Slot tomado si está en el carrito O en citas ya confirmadas
-  isSlotTaken(tattoerId: number, day: string, hour: string): boolean {
-    const schedule = `${day} ${hour}`;
-    if (this.items().some(i => i.tattoer.id === tattoerId && i.schedule === schedule)) return true;
-    return this.storedAppointments().some(a => a.tattoerId === tattoerId && a.schedule === schedule);
+  // El horario choca si se cruza con otro servicio del tatuador, teniendo en cuenta la duración
+  isSlotTaken(tattoerId: number, day: string, hour: string, duration = 60): boolean {
+    const start = this.toMinutes(hour);
+    const end = start + duration;
+    return this.busyBlocks(tattoerId, day).some(([s, e]) => start < e && s < end);
   }
 
   clear() { this.items.set([]); }

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600">
+<defs>
+<radialGradient id="p" cx="50%" cy="45%" r="70%"><stop offset="0" stop-color="#efe6d6"/><stop offset="1" stop-color="#d8cbb3"/></radialGradient>
+<filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="4"/><feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .07 0"/><feComposite in2="SourceGraphic" operator="in"/></filter>
+</defs>
+<rect width="600" height="600" fill="url(#p)"/>
+<rect width="600" height="600" filter="url(#grain)"/>
+<g fill="none" stroke="#141210" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+
+    <path d="M300 220c-40-80-150-90-160-20-8 60 60 90 160 80z" fill="#141210" fill-opacity=".9"/>
+    <path d="M300 220c40-80 150-90 160-20 8 60-60 90-160 80z" fill="#141210" fill-opacity=".9"/>
+    <path d="M300 300c-30 30-120 80-120 140 0 40 60 40 120-60z" fill="#141210" fill-opacity=".75"/>
+    <path d="M300 300c30 30 120 80 120 140 0 40-60 40-120-60z" fill="#141210" fill-opacity=".75"/>
+    <circle cx="210" cy="220" r="18" fill="#b8892f" stroke="none"/><circle cx="390" cy="220" r="18" fill="#b8892f" stroke="none"/>
+    <path d="M300 200v200" stroke-width="10"/><path d="M300 200c-10-40-30-60-50-70M300 200c10-40 30-60 50-70"/>
+</g>
+</svg>

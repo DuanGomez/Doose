@@ -1,3 +1,4 @@
+import { environment } from '../../../../environments/environment';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
@@ -35,7 +36,7 @@ export class DashboardComponent implements OnInit {
     this.userSvc.getAll().subscribe(d => this.totalUsers = d.length);
     this.tattooSvc.getAll().subscribe(d => this.totalServices = d.length);
     this.portfolioSvc.topOfWeek().subscribe(d => this.topItem = d);
-    this.http.get<ApiResponse<any[]>>('http://localhost:8080/api/contact')
+    this.http.get<ApiResponse<any[]>>(`${environment.apiUrl}/contact`)
       .pipe(map(r => r.data.length))
       .subscribe(n => this.totalMessages = n);
   }

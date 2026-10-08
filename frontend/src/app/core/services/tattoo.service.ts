@@ -1,3 +1,4 @@
+import { environment } from '../../../environments/environment';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
@@ -5,7 +6,7 @@ import { ApiResponse, TattooService } from '../models/models';
 
 @Injectable({ providedIn: 'root' })
 export class TattooServiceService {
-  private readonly API = 'http://localhost:8080/api/services';
+  private readonly API = `${environment.apiUrl}/services`;
 
   constructor(private http: HttpClient) {}
 

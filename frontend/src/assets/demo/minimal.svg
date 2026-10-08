@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600">
+<defs>
+<radialGradient id="p" cx="50%" cy="45%" r="70%"><stop offset="0" stop-color="#f2ebe0"/><stop offset="1" stop-color="#d8cbb3"/></radialGradient>
+<filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="4"/><feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .07 0"/><feComposite in2="SourceGraphic" operator="in"/></filter>
+</defs>
+<rect width="600" height="600" fill="url(#p)"/>
+<rect width="600" height="600" filter="url(#grain)"/>
+<g fill="none" stroke="#141210" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+
+    <path d="M300 380c-60-40-110-80-110-130 0-35 30-55 60-50 25 4 40 25 50 45 10-20 25-41 50-45 30-5 60 15 60 50 0 50-50 90-110 130z" stroke-width="4"/>
+    <path d="M140 300h70M390 300h70M450 285l15 15-15 15" stroke-width="3"/>
+</g>
+</svg>

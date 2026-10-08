@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600">
+<defs>
+<radialGradient id="p" cx="50%" cy="45%" r="70%"><stop offset="0" stop-color="#efe6d6"/><stop offset="1" stop-color="#d8cbb3"/></radialGradient>
+<filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="4"/><feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .07 0"/><feComposite in2="SourceGraphic" operator="in"/></filter>
+</defs>
+<rect width="600" height="600" fill="url(#p)"/>
+<rect width="600" height="600" filter="url(#grain)"/>
+<g fill="none" stroke="#141210" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+
+    <text x="300" y="300" text-anchor="middle" font-family="Brush Script MT, Segoe Script, cursive" font-size="78" textLength="400" lengthAdjust="spacingAndGlyphs" fill="#141210" stroke="none">Amor propio</text>
+    <path d="M170 340c80 25 180 25 260 0" stroke-width="3"/><circle cx="300" cy="360" r="5" fill="#b8892f" stroke="none"/>
+</g>
+</svg>

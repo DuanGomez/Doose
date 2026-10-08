@@ -49,6 +49,8 @@ export class ServicesComponent implements OnInit {
         type: s.type!
       }));
     });
+    // Los tatuadores solo se piden con sesión iniciada (el endpoint requiere autenticación).
+    if (!this.auth.isLoggedIn()) return;
     this.userSvc.getTattoers().subscribe((data: User[]) => {
       this.tattoers = data
         .filter(u => u.role === 'TATTOER')
@@ -57,9 +59,12 @@ export class ServicesComponent implements OnInit {
     });
   }
 
+  // Cualquier tatuador puede hacer el servicio; los especialistas en ese estilo aparecen primero.
   get filteredTattoers(): Tattoer[] {
     if (!this.selectedService) return this.tattoers;
-    return this.tattoers.filter(t => t.specialty === this.selectedService!.type);
+    const type = this.selectedService.type.toLowerCase();
+    const isSpecialist = (t: Tattoer) => !!t.specialty && type.includes(t.specialty.toLowerCase());
+    return [...this.tattoers.filter(isSpecialist), ...this.tattoers.filter(t => !isSpecialist(t))];
   }
 
   get availableHours(): string[] {
@@ -73,14 +78,14 @@ export class ServicesComponent implements OnInit {
       const inicioMinutos = h * 60 + m;
 
       if (inicioMinutos + duracion > cierreMinutos) return false;
-      if (this.cartService.isSlotTaken(this.selectedTattoer.id, this.selectedDay, hour)) return false;
+      if (this.selectedTattoer && this.cartService.isSlotTaken(this.selectedTattoer.id, this.selectedDay, hour, duracion)) return false;
 
       return true;
     });
   }
 
   get tattoerFullDay(): boolean {
-    return this.cartService.getServiceCountByDay(this.selectedTattoer.id, this.selectedDay) >= 3;
+    return !!this.selectedTattoer && this.cartService.getServiceCountByDay(this.selectedTattoer.id, this.selectedDay) >= 3;
   }
 
   openModal(service: TattooServiceExtended) {
@@ -90,11 +95,10 @@ export class ServicesComponent implements OnInit {
     }
     this.selectedService = service;
     this.selectedDay     = 'Lunes';
-    this.selectedHour    = '08:00';
     this.quantity        = 1;
     this.errorMsg.set('');
-    const available = this.tattoers.filter(t => t.specialty === service.type);
-    this.selectedTattoer = available[0] ?? this.tattoers[0];
+    this.selectedTattoer = this.filteredTattoers[0];
+    this.selectedHour    = this.availableHours[0] ?? '';
     this.showModal.set(true);
   }
 
